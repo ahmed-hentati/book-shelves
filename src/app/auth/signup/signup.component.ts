@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'; 
+import { map } from 'rxjs/operators' ;
+//import { AuthResponseData } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -11,7 +13,8 @@ import { Router } from '@angular/router';
 export class SignupComponent implements OnInit {
 
   signUpForm: FormGroup;
-  ErrorMessage: string;
+  errorMessage: string;
+  isAuth: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -20,6 +23,7 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    console.log(this.isAuth);
   }
 
   initForm() {
@@ -27,7 +31,7 @@ export class SignupComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.pattern(/[a-zA-Z0-9]{6,}/)]]
     });
-    console.log(this.signUpForm.valid);
+    //console.log(this.signUpForm.valid);
   }
 
 
@@ -39,7 +43,8 @@ export class SignupComponent implements OnInit {
     console.log(password);
     this.authService.createNewUser(email, password).subscribe(
       () => { this.router.navigateByUrl('/books') },
-      (error) => { console.log(error) }
+      (error) => { this.errorMessage = error;
+      console.log(error);}
     )
 
   }

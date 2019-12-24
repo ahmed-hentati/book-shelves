@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class SigninComponent implements OnInit {
 
   signInForm: FormGroup;
+  errorMessage: string;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -36,7 +37,9 @@ export class SigninComponent implements OnInit {
     const password = this.signInForm.get('password').value;
     this.authService.signInUser(email, password).subscribe(
       () => { this.router.navigateByUrl('/books') },
-      (error) => { console.log(error); }
+      (error) => { //console.log(error);
+                  this.errorMessage = error;
+      }
     )
   }
 
