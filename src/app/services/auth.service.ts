@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map,tap, catchError } from 'rxjs/operators';
 import { throwError, Subject } from 'rxjs';
 import { User } from '../auth/user.model';
+import { Router } from '@angular/router';
 
 interface AuthResponseData{
   kind : string ;
@@ -22,7 +23,7 @@ export class AuthService {
   isAuth:boolean = true;
   user = new Subject<User>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router : Router) { }
 
   createNewUser(email:string, password:string){
     // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCqdieSSNe-CbEOWyOLUrE6CBlHpsUAmtk
@@ -84,10 +85,8 @@ export class AuthService {
   
   // TO DO Later
   signOutUser(){
-    this.http.post('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCqdieSSNe-CbEOWyOLUrE6CBlHpsUAmtk',{
-      
-    })
-
+    this.user.next(null);
+    this.router.navigateByUrl('auth/signin');
   }
 
 }
