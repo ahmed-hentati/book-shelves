@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { map,tap, catchError } from 'rxjs/operators';
+import { throwError, Subject } from 'rxjs';
+import { User } from '../auth/user.model';
 
 interface AuthResponseData{
   kind : string ;
@@ -19,6 +20,7 @@ interface AuthResponseData{
 
 export class AuthService {
   isAuth:boolean = true;
+  user = new Subject<User>();
 
   constructor(private http: HttpClient) { }
 
@@ -29,7 +31,8 @@ export class AuthService {
     { email : email ,
       password : password,
       returnSecureToken: true
-    }).pipe(catchError(errRes => this.handleError(errRes)))
+    }).pipe(catchError(errRes => this.handleError(errRes) ), tap( (respData) => this.handleAuthentification(respData.email,respData.localId,respData.idToken,+respData.expiresIn) //+ Convert to a number
+      ) )
     /*
     .pipe(map(
       (loacalId) => { if (loacalId) { this.isAuth = true ; console.log(this.isAuth)}}
@@ -44,8 +47,8 @@ export class AuthService {
       password : password,
       returnSecureToken: true
     }).pipe(
-      catchError(errRes => this.handleError(errRes))
-      )
+      catchError(errRes => this.handleError(errRes)), tap( (respData) => this.handleAuthentification(respData.email,respData.localId,respData.idToken,+respData.expiresIn)
+      ))
     
     // changer isAuth si utilisateur connecté
     /*.pipe(map(
@@ -69,6 +72,14 @@ export class AuthService {
         
       }
       return throwError(messageErreur) 
+  }
+
+  private handleAuthentification(email : string, userId : string, token:string, expriesIn:number){
+    //const expirationDate = new Date(new Date().getTime() + +respData.expiresIn * 1000); //+convert to number
+    const expirationDate = new Date(new Date().getTime() + expriesIn * 1000);
+    const user = new User(email,userId,token,expirationDate);
+    this.user.next(user); 
+    console.log(user);
   }
   
   // TO DO Later
