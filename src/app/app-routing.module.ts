@@ -12,9 +12,9 @@ import { AuthGuardService } from './services/auth-guard.service';
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
   { path: 'auth/signin', component: SigninComponent },
-  { path: 'books', component: BookListComponent, canActivate :[AuthGuardService] },
-  { path: 'books/new', component: BookFormComponent},
-  { path: 'books/view/:id', component: SingleBookComponent},
+  { path: 'books', component: BookListComponent/*, canActivate :[AuthGuardService] */},
+  { path: 'books/new', component: BookFormComponent/*, canActivate :[AuthGuardService] */},
+  { path: 'books/view/:id', component: SingleBookComponent/*, canActivate :[AuthGuardService] */},
   { path : '', redirectTo: 'books', pathMatch: 'full'},
   { path : '**', redirectTo: 'books'} // path wildcard 
 ];

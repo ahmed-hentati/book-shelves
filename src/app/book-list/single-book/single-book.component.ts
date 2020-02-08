@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { BooksService } from 'src/app/services/books.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Book } from 'src/app/models/book.model';
 
 @Component({
   selector: 'app-single-book',
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SingleBookComponent implements OnInit {
 
-  constructor() { }
+  book :Book ;
+
+  constructor(private booksService : BooksService,private router : Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.book = new Book('','');  
+    const id = this.route.snapshot.params['id'];
+    this.booksService.getBooks().subscribe( (books:Book[]) => { this.book = books[id]; //firebase
+    console.log(this.book)})
   }
+
+  onBack(){
+    this.router.navigate(['/books']);
+  }
+  
 
 }

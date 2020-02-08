@@ -20,7 +20,6 @@ interface AuthResponseData{
 })
 
 export class AuthService {
-  isAuth:boolean = true;
   user = new Subject<User>();
 
   constructor(private http: HttpClient, private router : Router) { }
@@ -80,7 +79,7 @@ export class AuthService {
     const expirationDate = new Date(new Date().getTime() + expriesIn * 1000);
     const user = new User(email,userId,token,expirationDate);
     this.user.next(user); 
-    console.log(user);
+    //console.log(user);
   }
   
   // TO DO Later

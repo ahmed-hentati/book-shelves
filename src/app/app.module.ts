@@ -15,6 +15,7 @@ import { AuthGuardService } from './services/auth-guard.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {  Routes, RouterModule } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -34,6 +35,7 @@ import {  Routes, RouterModule } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxPaginationModule
     //RouterModule.forRoot(appRoutes)
   ],
   providers: [AuthService, BooksService, AuthGuardService],
